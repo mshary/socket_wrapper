@@ -51,4 +51,6 @@ Loading __write => 0x7f83be230140
 
 ```
 
+#### Copyright
+Copyright (c) 2019 Muhammad Shahzad Shafi <mshahzad@burraq-technologies.de>
 
