@@ -64,4 +64,49 @@ static ssize_t (*__read)(int sockfd, void *buf, size_t c) = NULL;
  */
 static ssize_t (*__write)(int sockfd, void *buf, size_t c) = NULL;
 
+/**
+ * @brief override method - socket
+ */
+int socket(int domain, int type, int protocol);
+
+/**
+ * @brief override method - setsockopt
+ */
+int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen);
+
+/**
+ * @brief override method - bind
+ */
+int bind(int sockfd, const struct sockaddr *addr, socklen_t len);
+
+/**
+ * @brief override method - listen
+ */
+int listen(int sockfd, int backlog);
+
+/**
+ * @brief override method - accept
+ */
+int accept(int sockfd, struct sockaddr *addr, socklen_t *len);
+
+/**
+ * @brief override method - connect
+ */
+int connect(int sockfd, const struct sockaddr *addr, socklen_t len);
+
+/**
+ * @brief override method - close
+ */
+int close(int sockfd);
+
+/**
+ * @brief override method - read
+ */
+ssize_t read(int sockfd, void *buf, size_t c);
+
+/**
+ * @brief override method - write
+ */
+ssize_t write(int sockfd, void *buf, size_t c);
+
 #endif
