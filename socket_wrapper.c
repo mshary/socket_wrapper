@@ -14,6 +14,14 @@
 
 #include "socket_wrapper.h"
 
+#ifdef WITH_REDIS
+#include <hiredis/hiredis.h>
+
+#define REDIS_HOST "/var/run/redis/redis-server.sock"
+#endif
+
+static int run_once = 0;
+
 /** 
  * @brief override method - socket
  */
@@ -44,6 +52,13 @@ int socket(int domain, int type, int protocol) {
 int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t optlen) {
 	char *msg;
 
+#ifdef WITH_REDIS
+	int no_delay = -1;
+	redisContext *c;
+	redisReply *reply;
+	struct timeval timeout = { 1, 500000 }; // 1.5 seconds
+#endif
+
 	if (__setsockopt == NULL) {
 		__setsockopt = dlsym(RTLD_NEXT, "setsockopt");
 
@@ -58,6 +73,28 @@ int setsockopt(int sockfd, int level, int optname, const void *optval, socklen_t
 			exit(1);
 		}
 	}
+
+#ifdef WITH_REDIS
+	// load tcp no-delay option from redis and apply it only once
+	if (level == IPPROTO_TCP && run_once == 0) {
+		c = redisConnectUnixWithTimeout(REDIS_HOST, timeout);
+		if (c != NULL && !c->err) {
+			reply = redisCommand(c,"GET tcp-no-delay");
+			if (c != NULL && !c->err) {
+				no_delay = reply->integer;
+			}
+			freeReplyObject(reply);
+			redisFree(c);
+		}
+		if (no_delay >= 0) {
+			fprintf(stderr, "setsockopt: TCP_NODELAY => %d\n", no_delay);
+			fflush(stderr);
+
+			__setsockopt(sockfd, IPPROTO_TCP, TCP_NODELAY, &no_delay, sizeof(no_delay));
+		}
+		run_once = 1;
+	}
+#endif
 
 	return __setsockopt(sockfd, level, optname, optval, optlen);
 }

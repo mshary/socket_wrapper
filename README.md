@@ -28,8 +28,11 @@ of newer GNU C shared library without having to be modified and recompiled.
 * Linux kernel MPTCP user API headers (optional)
 
 ### Compilation
-Simply run `make`. It will generate `libsocket_wrapper.so` file with MPTCP support.
-To compile without MPTCP support run `make without_mptcp`.
+There are multiple ways to compile,
+
+* Simply run `make`. It will generate `libsocket_wrapper.so` file with MPTCP support.
+* To compile with REDIS support to (load TCP options from redis), run `make with_redis`.
+* To compile without MPTCP (and redis) support run `make without_mptcp`.
 
 ### Usage
 Set the environment variable `LD_PRELOAD` with full path to `libsocket_wrapper.so` before running the program.
