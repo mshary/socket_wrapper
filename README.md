@@ -25,6 +25,7 @@ of newer GNU C shared library without having to be modified and recompiled.
 
 ### Dependencies
 * C compiler (C99 compliant)
+* REDIS C API library libhiredis-dev (optional)
 * Linux kernel MPTCP user API headers (optional)
 
 ### Compilation
