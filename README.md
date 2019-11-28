@@ -32,7 +32,7 @@ of newer GNU C shared library without having to be modified and recompiled.
 There are multiple ways to compile,
 
 * Simply run `make`. It will generate `libsocket_wrapper.so` file with MPTCP support.
-* To compile with REDIS support to (load TCP options from redis), run `make with_redis`.
+* To compile with REDIS support (to load TCP options from redis), run `make with_redis`.
 * To compile without MPTCP (and redis) support run `make without_mptcp`.
 
 ### Usage
